@@ -1,3 +1,4 @@
+//nolint
 package api
 
 import "testing"
@@ -38,4 +39,17 @@ func TestNewRequest(t *testing.T) {
 func TestNewURL(t *testing.T) {
 	u := newURL(p1, "")
 	t.Log(u.String())
+}
+
+func TestParseEngineString(t *testing.T) {
+	e, err := ParseEngineString("google")
+	t.Log(e)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	e, err = ParseEngineString("UNKNOWN ENGINE")
+	if err == nil {
+		t.Fatal("err is nil")
+	}
 }

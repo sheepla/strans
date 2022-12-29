@@ -17,7 +17,11 @@ const (
 	timeout         = 10
 )
 
-var ErrArgIsEmpty = errors.New("argument is empty")
+var (
+	ErrArgIsEmpty  = errors.New("argument is empty")
+	ErrParseEngine = errors.New("failed to parse engine string")
+	ErrAPI         = errors.New("an error occurred when calling the API")
+)
 
 type Param struct {
 	SourceLang string
@@ -52,7 +56,8 @@ func NewParam(source, target, text string, engine Engine) (*Param, error) {
 type Engine int
 
 const (
-	EngineGoogle Engine = iota + 1
+	EngineDefault Engine = iota
+	EngineGoogle
 	EngineLibre
 	EngineDeepL
 	// EngineICIBA
@@ -67,8 +72,26 @@ func (e Engine) String() string {
 		return "libre"
 	case EngineDeepL:
 		return "deepl"
+	case EngineDefault:
+		return ""
 	default:
 		return ""
+	}
+}
+
+func ParseEngineString(s string) (Engine, error) {
+	lower := strings.ToLower(strings.TrimSpace(s))
+	switch lower {
+	case "google":
+		return EngineGoogle, nil
+	case "libre":
+		return EngineDeepL, nil
+	case "deepl":
+		return EngineDeepL, nil
+	case "default":
+		return EngineDefault, nil
+	default:
+		return EngineDefault, fmt.Errorf("%w (%s)", ErrParseEngine, s)
 	}
 }
 
@@ -86,7 +109,7 @@ func Translate(param *Param, instance string) (*Result, error) {
 
 	body, err := fetch(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get response: %w", err)
+		return nil, fmt.Errorf("%w: %s", ErrAPI, err)
 	}
 
 	result, err := parseResult(body)
@@ -144,7 +167,10 @@ func newURL(param *Param, instance string) *url.URL {
 	q.Add("from", param.SourceLang)
 	q.Add("to", param.TargetLang)
 	q.Add("text", param.Text)
-	q.Add("engine", param.Engine.String())
+
+	if param.Engine != EngineDefault {
+		q.Add("engine", param.Engine.String())
+	}
 
 	u.RawQuery = q.Encode()
 
