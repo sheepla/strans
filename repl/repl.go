@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/peterh/liner"
 	"github.com/sheepla/strans/api"
@@ -40,8 +41,16 @@ func Start(param *api.Param) {
 			}
 		}
 
+		if strings.TrimSpace(input) == "" {
+			continue
+		}
+
 		param.Text = input
+
 		result, err := api.Translate(param)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
 
 		fmt.Fprintln(os.Stdout, result.Text)
 	}
