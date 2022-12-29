@@ -88,6 +88,7 @@ func initApp() *cli.App {
 			Aliases:  []string{"e"},
 			Required: false,
 			Usage:    "Name of translate engine",
+			EnvVars:  []string{"STRANS_ENGINE"},
 			Action: func(ctx *cli.Context, s string) error {
 				if strings.TrimSpace(s) == "" {
 					return cli.Exit(
