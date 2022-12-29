@@ -6,8 +6,7 @@ A command line translator with GNU Readline like interactive mode (`--repl`) ins
 
 Non-interactive mode usage: 
 
-Specify the translation source language, translation destination language, engine name and instance name in the options and specify the text in arguments execute.
-
+Specify the translation source language, translation destination language, engine name and instance host name in the options and specify the text in arguments execute.
 
 ```
 NAME:
