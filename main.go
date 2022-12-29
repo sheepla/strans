@@ -44,7 +44,7 @@ func initApp() *cli.App {
 		Usage:     appDescription,
 		ArgsUsage: "TEXT...",
 		Version:   appVersion,
-		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE][-i|--instance INSTANCE] [-s|--source SOURCE_LANG] -t|--target TARGET_LANG TEXT...\n%s [-r|--repl]", appName, appName),
+		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE] [-i|--instance INSTANCE] [-s|--source SOURCE_LANG] <-t|--target TARGET_LANG> TEXT...\n%s [-r|--repl]", appName, appName),
 		Suggest:   true,
 	}
 
