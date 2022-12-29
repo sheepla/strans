@@ -1,4 +1,4 @@
-//nolint:gocritic,deadcode
+//nolint:gocritic,deadcode,varnamelen
 package main
 
 import (
@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/sheepla/strans/api"
+	"github.com/sheepla/strans/repl"
 	"github.com/urfave/cli/v2"
 )
 
@@ -27,6 +28,9 @@ const (
 	exitCodeErrInternal
 )
 
+//nolint:gochecknoglobals
+var selectedEngine api.Engine
+
 func main() {
 	if err := initApp().Run(os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -40,7 +44,7 @@ func initApp() *cli.App {
 		Usage:     appDescription,
 		ArgsUsage: "TEXT...",
 		Version:   appVersion,
-		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE][-i|--instance INSTANCE] -s SOURCE_LANG -t TARGET_LANG TEXT...\n%s [-r|--repl]", appName, appName),
+		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE][-i|--instance INSTANCE] [-s|--source SOURCE_LANG] -t|--target TARGET_LANG TEXT...\n%s [-r|--repl]", appName, appName),
 		Suggest:   true,
 	}
 
@@ -48,16 +52,16 @@ func initApp() *cli.App {
 		&cli.StringFlag{
 			Name:     "source",
 			Aliases:  []string{"s", "from"},
-			Required: true,
+			Required: false,
 			Usage:    "Source language to translate",
 			EnvVars:  []string{"STRANS_SOURCE_LANG"},
 			Action: func(ctx *cli.Context, s string) error {
-				if strings.TrimSpace(s) == "" {
-					return cli.Exit(
-						"source language must not be empty string",
-						exitCodeErrArgs,
-					)
-				}
+				//if strings.TrimSpace(s) == "" {
+				//	return cli.Exit(
+				//		"source language must not be empty string",
+				//		exitCodeErrArgs,
+				//	)
+				//}
 
 				return nil
 			},
@@ -79,22 +83,32 @@ func initApp() *cli.App {
 				return nil
 			},
 		},
-		//&cli.StringFlag{
-		//	Name:     "engine",
-		//	Aliases:  []string{"e"},
-		//	Required: false,
-		//	Usage:    "Name of translate engine",
-		//	Action: func(ctx *cli.Context, s string) error {
-		//		if strings.TrimSpace(s) == "" {
-		//			return cli.Exit(
-		//				"target language must not be empty string",
-		//				exitCodeErrArgs,
-		//			)
-		//		}
+		&cli.StringFlag{
+			Name:     "engine",
+			Aliases:  []string{"e"},
+			Required: false,
+			Usage:    "Name of translate engine",
+			Action: func(ctx *cli.Context, s string) error {
+				if strings.TrimSpace(s) == "" {
+					return cli.Exit(
+						"target language must not be empty string",
+						exitCodeErrArgs,
+					)
+				}
 
-		//		return nil
-		//	},
-		//},
+				eng, err := api.ParseEngineString(s)
+				if err != nil {
+					return cli.Exit(
+						err,
+						exitCodeErrArgs,
+					)
+				}
+
+				selectedEngine = eng
+
+				return nil
+			},
+		},
 		&cli.StringFlag{
 			Name:     "instance",
 			Aliases:  []string{"i"},
@@ -133,27 +147,14 @@ func initApp() *cli.App {
 }
 
 func run(ctx *cli.Context) error {
-	if ctx.NArg() == 0 {
-		return cli.Exit(
-			"must require argument(s)",
-			exitCodeErrArgs,
-		)
-	}
-
 	source := ctx.String("source")
 	target := ctx.String("target")
-
-	//engine, err := api.ParseEngineString(ctx.String("engine"))
-	//if err != nil {
-	//	return cli.Exit(
-	//		err,
-	//		exitCodeErrArgs,
-	//	)
-	//}
+	instance := ctx.String("instance")
 
 	text := strings.Join(ctx.Args().Slice(), " ")
 
-	param, err := api.NewParam(source, target, text, api.EngineDefault)
+	// Create parameter
+	param, err := api.NewParam(source, target, text, selectedEngine, instance)
 	if err != nil {
 		return cli.Exit(
 			err,
@@ -161,9 +162,15 @@ func run(ctx *cli.Context) error {
 		)
 	}
 
-	instance := ctx.String("instance")
+	if ctx.Bool("repl") {
+		// Start REPL mode
+		repl.Start(param)
 
-	result, err := api.Translate(param, instance)
+		return cli.Exit("", exitCodeOK)
+	}
+
+	// Execute translate
+	result, err := api.Translate(param)
 	if err != nil {
 		if errors.Is(err, api.ErrAPI) {
 			return cli.Exit(

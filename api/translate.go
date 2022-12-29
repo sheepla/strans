@@ -28,26 +28,24 @@ type Param struct {
 	TargetLang string
 	Text       string
 	Engine     Engine
+	Instance   string
 }
 
-func NewParam(source, target, text string, engine Engine) (*Param, error) {
-	if strings.TrimSpace(source) == "" {
-		return nil, fmt.Errorf("%w (source language)", ErrArgIsEmpty)
-	}
-
+func NewParam(source, target, text string, engine Engine, instance string) (*Param, error) {
 	if strings.TrimSpace(target) == "" {
 		return nil, fmt.Errorf("%w (target language)", ErrArgIsEmpty)
 	}
 
-	if strings.TrimSpace(target) == "" {
-		return nil, fmt.Errorf("%w (text)", ErrArgIsEmpty)
-	}
+	// if strings.TrimSpace(text) == "" {
+	// 	return nil, fmt.Errorf("%w (text)", ErrArgIsEmpty)
+	// }
 
 	param := &Param{
 		SourceLang: source,
 		TargetLang: target,
 		Text:       text,
 		Engine:     engine,
+		Instance:   instance,
 	}
 
 	return param, nil
@@ -85,7 +83,7 @@ func ParseEngineString(s string) (Engine, error) {
 	case "google":
 		return EngineGoogle, nil
 	case "libre":
-		return EngineDeepL, nil
+		return EngineLibre, nil
 	case "deepl":
 		return EngineDeepL, nil
 	case "default":
@@ -95,14 +93,23 @@ func ParseEngineString(s string) (Engine, error) {
 	}
 }
 
+func ListEngines() []string {
+	return []string{
+		EngineDefault.String(),
+		EngineGoogle.String(),
+		EngineLibre.String(),
+		EngineDeepL.String(),
+	}
+}
+
 //nolint:tagliatelle
 type Result struct {
 	SourceLang string `json:"source_language"`
 	Text       string `json:"translated-text"`
 }
 
-func Translate(param *Param, instance string) (*Result, error) {
-	req, err := newRequest(param, instance)
+func Translate(param *Param) (*Result, error) {
+	req, err := newRequest(param)
 	if err != nil {
 		return nil, err
 	}
@@ -151,20 +158,24 @@ func fetch(req *http.Request) (io.ReadCloser, error) {
 	return resp.Body, nil
 }
 
-func newURL(param *Param, instance string) *url.URL {
-	if strings.TrimSpace(instance) == "" {
-		instance = defaultInstance
+func newURL(param *Param) *url.URL {
+	if strings.TrimSpace(param.Instance) == "" {
+		param.Instance = defaultInstance
 	}
 
 	//nolint:exhaustivestruct,exhaustruct,varnamelen
 	u := &url.URL{
 		Scheme: "https",
-		Host:   instance,
+		Host:   param.Instance,
 		Path:   "api/translate",
 	}
 
 	q := u.Query()
-	q.Add("from", param.SourceLang)
+
+	if strings.TrimSpace(param.SourceLang) != "" {
+		q.Add("from", param.SourceLang)
+	}
+
 	q.Add("to", param.TargetLang)
 	q.Add("text", param.Text)
 
@@ -177,9 +188,9 @@ func newURL(param *Param, instance string) *url.URL {
 	return u
 }
 
-func newRequest(param *Param, instance string) (*http.Request, error) {
+func newRequest(param *Param) (*http.Request, error) {
 	//nolint:varnamelen
-	u := newURL(param, instance)
+	u := newURL(param)
 
 	//nolint:noctx
 	req, err := http.NewRequest(
