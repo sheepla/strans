@@ -11,10 +11,10 @@ Specify the translation source language, translation destination language, engin
 
 ```
 NAME:
-   strans - a command line SimplyTranslate client with GNU Readline like interactive mode
+   strans - a command line SimplyTranslate client with bash-like interactive mode
 
 USAGE:
-   strans [-e|--engine ENGINE][-i|--instance INSTANCE] [-s|--source SOURCE_LANG] -t|--target TARGET_LANG TEXT...
+   strans [-e|--engine ENGINE] [-i|--instance INSTANCE] [-s|--source SOURCE_LANG] <-t|--target TARGET_LANG> TEXT...
    strans [-r|--repl]
 
 VERSION:
@@ -26,12 +26,11 @@ COMMANDS:
 GLOBAL OPTIONS:
    --source value, -s value, --from value  Source language to translate [$STRANS_SOURCE_LANG]
    --target value, -t value, --to value    Target language to translate [$STRANS_TARGET_LANG]
-   --engine value, -e value                Name of translate engine (google, libre, deepl)
-   --instance value, -i value              Instance host name of SimplyTranslate [$STRANS_INSTANCE]
+   --engine value, -e value                Name of translate engine [$STRANS_ENGINE]
+   --instance value, -i value              Instance URL of SimplyTranslate [$STRANS_INSTANCE]
    --repl, -r                              Start bash-like REPL mode (default: false)
    --help, -h                              show help (default: false)
    --version, -v                           print the version (default: false)
-Required flag "to" not set
 ```
 
 Interactive mode usage: Execute the command with the `-r`, `--repl` flag. 
