@@ -17,6 +17,7 @@ var (
 	appName        = "strans"
 	appDescription = "a command line SimplyTranslate client with bash-like interactive mode"
 	appVersion     = "unknown"
+	appRevision    = "unknown"
 )
 
 type exitCode int
@@ -43,7 +44,7 @@ func initApp() *cli.App {
 		Name:      appName,
 		Usage:     appDescription,
 		ArgsUsage: "TEXT...",
-		Version:   appVersion,
+		Version:   fmt.Sprintf("%s-%s", appVersion, appRevision),
 		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE] [-i|--instance INSTANCE] [-s|--source SOURCE_LANG] <-t|--target TARGET_LANG> TEXT...\n%s [-r|--repl]", appName, appName),
 		Suggest:   true,
 	}
