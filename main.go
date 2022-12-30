@@ -23,11 +23,15 @@ var (
 type exitCode int
 
 const (
-	exitCodeOK = iota
+	exitCodeOK exitCode = iota
 	exitCodeErrArgs
 	exitCodeErrAPI
 	exitCodeErrInternal
 )
+
+func (e exitCode) Int() int {
+	return int(e)
+}
 
 //nolint:gochecknoglobals
 var selectedEngine api.Engine
@@ -77,7 +81,7 @@ func initApp() *cli.App {
 				if strings.TrimSpace(s) == "" {
 					return cli.Exit(
 						"target language must not be empty string",
-						exitCodeErrArgs,
+						exitCodeErrArgs.Int(),
 					)
 				}
 
@@ -94,7 +98,7 @@ func initApp() *cli.App {
 				if strings.TrimSpace(s) == "" {
 					return cli.Exit(
 						"engine must not be empty string",
-						exitCodeErrArgs,
+						exitCodeErrArgs.Int(),
 					)
 				}
 
@@ -102,7 +106,7 @@ func initApp() *cli.App {
 				if err != nil {
 					return cli.Exit(
 						err,
-						exitCodeErrArgs,
+						exitCodeErrArgs.Int(),
 					)
 				}
 
@@ -121,7 +125,7 @@ func initApp() *cli.App {
 				if strings.TrimSpace(s) == "" {
 					return cli.Exit(
 						"instance must not be empty string",
-						exitCodeErrArgs,
+						exitCodeErrArgs.Int(),
 					)
 				}
 
@@ -160,7 +164,7 @@ func run(ctx *cli.Context) error {
 	if err != nil {
 		return cli.Exit(
 			err,
-			exitCodeErrArgs,
+			exitCodeErrArgs.Int(),
 		)
 	}
 
@@ -168,7 +172,7 @@ func run(ctx *cli.Context) error {
 		// Start REPL mode
 		repl.Start(param)
 
-		return cli.Exit("", exitCodeOK)
+		return cli.Exit("", exitCodeOK.Int())
 	}
 
 	// Execute translate
@@ -177,17 +181,17 @@ func run(ctx *cli.Context) error {
 		if errors.Is(err, api.ErrAPI) {
 			return cli.Exit(
 				fmt.Sprintf("%s: %s", api.ErrAPI, err),
-				exitCodeErrAPI,
+				exitCodeErrAPI.Int(),
 			)
 		}
 
 		return cli.Exit(
 			fmt.Sprintf("internal error: %s", err),
-			exitCodeErrInternal,
+			exitCodeErrInternal.Int(),
 		)
 	}
 
 	fmt.Fprintln(ctx.App.Writer, result.Text)
 
-	return cli.Exit("", exitCodeOK)
+	return cli.Exit("", exitCodeOK.Int())
 }
