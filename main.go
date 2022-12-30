@@ -54,7 +54,7 @@ func initApp() *cli.App {
 		&cli.StringFlag{
 			Name:     "source",
 			Aliases:  []string{"s", "from"},
-			Required: false,
+			Required: true,
 			Usage:    "Source language to translate",
 			EnvVars:  []string{"STRANS_SOURCE_LANG"},
 			Action: func(ctx *cli.Context, s string) error {
