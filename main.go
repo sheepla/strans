@@ -2,8 +2,10 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -26,6 +28,7 @@ const (
 	exitCodeOK exitCode = iota
 	exitCodeErrArgs
 	exitCodeErrAPI
+	exitCodeErrIO
 	exitCodeErrInternal
 )
 
@@ -61,12 +64,12 @@ func initApp() *cli.App {
 			Usage:    "Source language to translate",
 			EnvVars:  []string{"STRANS_SOURCE_LANG"},
 			Action: func(ctx *cli.Context, s string) error {
-				//if strings.TrimSpace(s) == "" {
-				//	return cli.Exit(
-				//		"source language must not be empty string",
-				//		exitCodeErrArgs,
-				//	)
-				//}
+				if strings.TrimSpace(s) == "" {
+					return cli.Exit(
+						"source language must not be empty string",
+						exitCodeErrArgs.Int(),
+					)
+				}
 
 				return nil
 			},
@@ -157,7 +160,21 @@ func run(ctx *cli.Context) error {
 	target := ctx.String("target")
 	instance := ctx.String("instance")
 
-	text := strings.Join(ctx.Args().Slice(), " ")
+	var text string
+
+	if ctx.NArg() == 1 && ctx.Args().First() == "-" {
+		var err error
+
+		text, err = readString(ctx.App.Reader)
+		if err != nil {
+			return cli.Exit(
+				fmt.Sprintf("failed to read stnadard input: %s", err),
+				exitCodeErrIO.Int(),
+			)
+		}
+	} else {
+		text = strings.Join(ctx.Args().Slice(), " ")
+	}
 
 	// Create parameter
 	param, err := api.NewParam(source, target, text, selectedEngine, instance)
@@ -194,4 +211,14 @@ func run(ctx *cli.Context) error {
 	fmt.Fprintln(ctx.App.Writer, result.Text)
 
 	return cli.Exit("", exitCodeOK.Int())
+}
+
+func readString(r io.Reader) (string, error) {
+	buf := new(bytes.Buffer)
+	if _, err := buf.ReadFrom(r); err != nil {
+		//nolint:wrapcheck
+		return "", err
+	}
+
+	return buf.String(), nil
 }
