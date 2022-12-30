@@ -17,7 +17,7 @@ import (
 //nolint:gochecknoglobals
 var (
 	appName        = "strans"
-	appDescription = "a command line SimplyTranslate client with bash-like interactive mode"
+	appDescription = "a command line translate tool with GNU Readline like interactive mode"
 	appVersion     = "unknown"
 	appRevision    = "unknown"
 )
@@ -52,7 +52,7 @@ func initApp() *cli.App {
 		Usage:     appDescription,
 		ArgsUsage: "TEXT...",
 		Version:   fmt.Sprintf("%s-%s", appVersion, appRevision),
-		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE] [-i|--instance INSTANCE] [-s|--source SOURCE_LANG] <-t|--target TARGET_LANG> [-r|--repl] TEXT...", appName),
+		UsageText: fmt.Sprintf("%s [OPTIONS] TEXT...\necho TEXT... | %s [OPTIONS] -\n%s [OPTIONS] - < FILE", appName, appName, appName),
 		Suggest:   true,
 	}
 
@@ -139,7 +139,7 @@ func initApp() *cli.App {
 			Name:     "repl",
 			Aliases:  []string{"r"},
 			Required: false,
-			Usage:    "Start bash-like REPL mode",
+			Usage:    "Start interactive mode",
 		},
 		&cli.BoolFlag{
 			Name:     "debug",
