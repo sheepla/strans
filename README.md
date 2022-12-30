@@ -55,8 +55,12 @@ strans -s en -t ja < README.md # => The contents of the README.md will translate
 
 ## Interactive mode
 
+You can use GNU Readline-like interactive mode.
+
 Execute the command with the `-r`, `--repl` flag. 
 Enter your text and it will be translated instantly.
+
+Empty inputs are ignored and no translation is performed.
 
 Typing `Ctrl-D` exits interactive mode and returns you to the shell you were running from.
 
