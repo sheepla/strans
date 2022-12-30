@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/peterh/liner"
-	"github.com/sheepla/strans/api"
+	"github.com/sheepla/strans/trans"
 )
 
 // func promptString(param *api.Param) string {
@@ -19,7 +19,7 @@ import (
 // 	)
 // }
 
-func Start(param *api.Param) {
+func Start(param *trans.Param) {
 	//nolint:forbidigo
 	fmt.Println("REPL mode. Type Ctrl-D to exit.")
 
@@ -47,7 +47,7 @@ func Start(param *api.Param) {
 
 		param.Text = input
 
-		result, err := api.Translate(param)
+		result, err := trans.Translate(param)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

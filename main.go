@@ -1,4 +1,3 @@
-//nolint:gocritic,deadcode,varnamelen
 package main
 
 import (
@@ -11,6 +10,7 @@ import (
 
 	"github.com/sheepla/strans/api"
 	"github.com/sheepla/strans/repl"
+	"github.com/sheepla/strans/trans"
 	"github.com/urfave/cli/v2"
 )
 
@@ -27,7 +27,7 @@ type exitCode int
 const (
 	exitCodeOK exitCode = iota
 	exitCodeErrArgs
-	exitCodeErrAPI
+	exitCodeErrTranslate
 	exitCodeErrIO
 	exitCodeErrInternal
 )
@@ -35,9 +35,6 @@ const (
 func (e exitCode) Int() int {
 	return int(e)
 }
-
-//nolint:gochecknoglobals
-var selectedEngine api.Engine
 
 func main() {
 	if err := initApp().Run(os.Args); err != nil {
@@ -87,33 +84,6 @@ func initApp() *cli.App {
 						exitCodeErrArgs.Int(),
 					)
 				}
-
-				return nil
-			},
-		},
-		&cli.StringFlag{
-			Name:     "engine",
-			Aliases:  []string{"e"},
-			Required: false,
-			Usage:    "Name of translate engine",
-			EnvVars:  []string{"STRANS_ENGINE"},
-			Action: func(ctx *cli.Context, s string) error {
-				if strings.TrimSpace(s) == "" {
-					return cli.Exit(
-						"engine must not be empty string",
-						exitCodeErrArgs.Int(),
-					)
-				}
-
-				eng, err := api.ParseEngineString(s)
-				if err != nil {
-					return cli.Exit(
-						err,
-						exitCodeErrArgs.Int(),
-					)
-				}
-
-				selectedEngine = eng
 
 				return nil
 			},
@@ -177,7 +147,7 @@ func run(ctx *cli.Context) error {
 	}
 
 	// Create parameter
-	param, err := api.NewParam(source, target, text, selectedEngine, instance)
+	param, err := trans.NewParam(source, target, text, instance)
 	if err != nil {
 		return cli.Exit(
 			err,
@@ -193,12 +163,12 @@ func run(ctx *cli.Context) error {
 	}
 
 	// Execute translate
-	result, err := api.Translate(param)
+	result, err := trans.Translate(param)
 	if err != nil {
 		if errors.Is(err, api.ErrAPI) {
 			return cli.Exit(
 				fmt.Sprintf("%s: %s", api.ErrAPI, err),
-				exitCodeErrAPI.Int(),
+				exitCodeErrTranslate.Int(),
 			)
 		}
 
