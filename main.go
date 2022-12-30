@@ -144,7 +144,7 @@ func run(ctx *cli.Context) error {
 	}
 
 	// Create parameter
-	param, err := trans.NewParam(source, target, text, instance)
+	param, err := trans.NewTranslateParam(source, target, text, instance)
 	if err != nil {
 		return cli.Exit(
 			err,

@@ -25,7 +25,7 @@ var (
 	ErrAPI         = errors.New("an error occurred on calling API")
 )
 
-func Translate(param *Param) (*Result, error) {
+func Translate(param *TranslateParam) (*Result, error) {
 	body, err := httpGet(param)
 	if err != nil {
 		return nil, err
@@ -39,14 +39,14 @@ func Translate(param *Param) (*Result, error) {
 	return result, nil
 }
 
-type Param struct {
+type TranslateParam struct {
 	SourceLang string
 	TargetLang string
 	Text       string
 	Instance   string
 }
 
-func NewParam(source, target, text, instance string) (*Param, error) {
+func NewTranslateParam(source, target, text, instance string) (*TranslateParam, error) {
 	if strings.TrimSpace(source) == "" {
 		return nil, fmt.Errorf("%w: source must not be empty string", ErrInvalidArgs)
 	}
@@ -59,7 +59,7 @@ func NewParam(source, target, text, instance string) (*Param, error) {
 	// 	return nil, fmt.Errorf("%w: text must not be empty string", ErrInvalidArgs)
 	// }
 
-	return &Param{
+	return &TranslateParam{
 		SourceLang: source,
 		TargetLang: target,
 		Text:       text,
@@ -67,7 +67,7 @@ func NewParam(source, target, text, instance string) (*Param, error) {
 	}, nil
 }
 
-func (param *Param) ToURL() *url.URL {
+func (param *TranslateParam) ToURL() *url.URL {
 	if strings.TrimSpace(param.Instance) == "" {
 		param.Instance = defaultInstance
 	}
@@ -80,7 +80,7 @@ func (param *Param) ToURL() *url.URL {
 	}
 }
 
-func httpGet(param *Param) (io.ReadCloser, error) {
+func httpGet(param *TranslateParam) (io.ReadCloser, error) {
 	//nolint:noctx
 	req, err := http.NewRequest(
 		http.MethodGet,

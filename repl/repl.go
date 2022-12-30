@@ -19,7 +19,7 @@ import (
 // 	)
 // }
 
-func Start(param *trans.Param) {
+func Start(param *trans.TranslateParam) {
 	//nolint:forbidigo
 	fmt.Println("REPL mode. Type Ctrl-D to exit.")
 
