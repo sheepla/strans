@@ -2,16 +2,14 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	"github.com/sheepla/strans/api"
 	"github.com/sheepla/strans/repl"
 	"github.com/sheepla/strans/trans"
-	"github.com/urfave/cli/v2"
+	cli "github.com/urfave/cli/v2"
 )
 
 //nolint:gochecknoglobals
@@ -29,7 +27,6 @@ const (
 	exitCodeErrArgs
 	exitCodeErrTranslate
 	exitCodeErrIO
-	exitCodeErrInternal
 )
 
 func (e exitCode) Int() int {
@@ -165,16 +162,9 @@ func run(ctx *cli.Context) error {
 	// Execute translate
 	result, err := trans.Translate(param)
 	if err != nil {
-		if errors.Is(err, api.ErrAPI) {
-			return cli.Exit(
-				fmt.Sprintf("%s: %s", api.ErrAPI, err),
-				exitCodeErrTranslate.Int(),
-			)
-		}
-
 		return cli.Exit(
-			fmt.Sprintf("internal error: %s", err),
-			exitCodeErrInternal.Int(),
+			err,
+			exitCodeErrTranslate.Int(),
 		)
 	}
 
