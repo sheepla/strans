@@ -93,7 +93,7 @@ func initApp() *cli.App {
 			Action: func(ctx *cli.Context, s string) error {
 				if strings.TrimSpace(s) == "" {
 					return cli.Exit(
-						"target language must not be empty string",
+						"engine must not be empty string",
 						exitCodeErrArgs,
 					)
 				}
@@ -120,7 +120,7 @@ func initApp() *cli.App {
 			Action: func(ctx *cli.Context, s string) error {
 				if strings.TrimSpace(s) == "" {
 					return cli.Exit(
-						"target language must not be empty string",
+						"instance must not be empty string",
 						exitCodeErrArgs,
 					)
 				}
