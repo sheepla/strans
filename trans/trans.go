@@ -26,7 +26,12 @@ var (
 )
 
 func Translate(param *TranslateParam) (*Result, error) {
-	body, err := httpGet(param)
+	req, err := param.ToHTTPRequest()
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := httpGet(req)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +85,7 @@ func (param *TranslateParam) ToURL() *url.URL {
 	}
 }
 
-func httpGet(param *TranslateParam) (io.ReadCloser, error) {
+func (param *TranslateParam) ToHTTPRequest() (*http.Request, error) {
 	//nolint:noctx
 	req, err := http.NewRequest(
 		http.MethodGet,
@@ -91,6 +96,10 @@ func httpGet(param *TranslateParam) (io.ReadCloser, error) {
 		return nil, fmt.Errorf("%w: %s", ErrRequest, err)
 	}
 
+	return req, nil
+}
+
+func httpGet(req *http.Request) (io.ReadCloser, error) {
 	//nolint:exhaustivestruct,exhaustruct
 	cl := &http.Client{
 		Timeout: timeout,
