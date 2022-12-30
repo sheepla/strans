@@ -1,35 +1,10 @@
 # strans
 
-A command line translator with GNU Readline like interactive mode (`--repl`) inspired by [translate-shell](https://github.com/soimort/translate-shell)
+A command line translate tool written in Go with GNU Readline-like interactive mode (`--repl`) inspired by [translate-shell](https://github.com/soimort/translate-shell)
 
 ## Usage
 
 This tool supports both interactive and non-interactive usage.
-
-```
-NAME:
-   strans - a command line translate tool with GNU Readline like interactive mode
-
-USAGE:
-   strans [OPTIONS] TEXT...
-   echo TEXT... | strans [OPTIONS] -
-   strans [OPTIONS] - < FILE
-
-VERSION:
-   unknown-unknown
-
-COMMANDS:
-   help, h  Shows a list of commands or help for one command
-
-GLOBAL OPTIONS:
-   --source value, -s value, --from value  Source language to translate [$STRANS_SOURCE_LANG]
-   --target value, -t value, --to value    Target language to translate [$STRANS_TARGET_LANG]
-   --engine value, -e value                Name of translate engine [$STRANS_ENGINE]
-   --instance value, -i value              Instance host name of SimplyTranslate [$STRANS_INSTANCE]
-   --repl, -r                              Start interactive mode (default: false)
-   --help, -h                              show help (default: false)
-   --version, -v                           print the version (default: false)
-```
 
 
 ## Non-interactive mode
@@ -82,6 +57,30 @@ REPL mode. Type Ctrl-D to exit.
 
 Specify the source language name (e.g. `en`, `ja`, etc.) for `--source` option, and specify the target language name for `--target` option.
 
+```
+NAME:
+   strans - a command line translate tool with GNU Readline like interactive mode
+
+USAGE:
+   strans [OPTIONS] TEXT...
+   echo TEXT... | strans [OPTIONS] -
+   strans [OPTIONS] - < FILE
+
+VERSION:
+   unknown-unknown
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --source value, -s value, --from value  Source language to translate [$STRANS_SOURCE_LANG]
+   --target value, -t value, --to value    Target language to translate [$STRANS_TARGET_LANG]
+   --instance value, -i value              Instance host name of SimplyTranslate [$STRANS_INSTANCE]
+   --repl, -r                              Start interactive mode (default: false)
+   --help, -h                              show help (default: false)
+   --version, -v                           print the version (default: false)
+```
+
 Various options can specify default values not only from command line arguments, 
 but also by setting environment variables.
 
@@ -99,7 +98,7 @@ go install github.com/sheepla/strans@latest
 
 ## Thanks
 
-- [SimplyTranslate](https://simple-web.org/projects/simplytranslate.html)
+- [lingva-translate](https://github.com/thedaviddelta/lingva-translate)
 - [translate-shell](https://github.com/soimort/translate-shell)
 
 
