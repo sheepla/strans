@@ -34,7 +34,7 @@ var selectedEngine api.Engine
 
 func main() {
 	if err := initApp().Run(os.Args); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintf(os.Stderr, "[ ERR ] %s\n", err)
 	}
 }
 
@@ -45,7 +45,7 @@ func initApp() *cli.App {
 		Usage:     appDescription,
 		ArgsUsage: "TEXT...",
 		Version:   fmt.Sprintf("%s-%s", appVersion, appRevision),
-		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE] [-i|--instance INSTANCE] [-s|--source SOURCE_LANG] <-t|--target TARGET_LANG> TEXT...\n%s [-r|--repl]", appName, appName),
+		UsageText: fmt.Sprintf("%s [-e|--engine ENGINE] [-i|--instance INSTANCE] [-s|--source SOURCE_LANG] <-t|--target TARGET_LANG> [-r|--repl] TEXT...", appName),
 		Suggest:   true,
 	}
 
