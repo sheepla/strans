@@ -36,7 +36,7 @@ Interactive mode usage: Execute the command with the `-r`, `--repl` flag.
 Enter your text and it will be translated instantly. Exit with `Ctrl-D`
 
 ```sh
-[you@your-computer]$ strans --repl
+[you@your-computer]$ strans --repl -t ja
 REPL mode. Type Ctrl-D to exit.
 >
 > Hello, World
