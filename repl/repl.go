@@ -11,20 +11,20 @@ import (
 	"github.com/sheepla/strans/api"
 )
 
-func promptString(param *api.Param) string {
-	return fmt.Sprintf("[%s] %s -> %s\n > ",
-		param.Engine,
-		param.SourceLang,
-		param.TargetLang,
-	)
-}
+// func promptString(param *api.Param) string {
+// 	return fmt.Sprintf("[%s] %s -> %s\n > ",
+// 		param.Engine,
+// 		param.SourceLang,
+// 		param.TargetLang,
+// 	)
+// }
 
 func Start(param *api.Param) {
 	//nolint:forbidigo
 	fmt.Println("REPL mode. Type Ctrl-D to exit.")
 
 	line := liner.NewLiner()
-	line.SetCtrlCAborts(true)
+	line.SetCtrlCAborts(false)
 	line.SetMultiLineMode(true)
 
 	defer line.Close()
