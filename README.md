@@ -1,4 +1,16 @@
+<div align="center">
+
 # strans
+
+</div>
+
+<div align="right">
+
+[![golangci-lint](https://github.com/sheepla/strans/actions/workflows/ci.yml/badge.svg)](https://github.com/sheepla/strans/actions/workflows/ci.yml)
+
+[![Release](https://github.com/sheepla/strans/actions/workflows/release.yml/badge.svg)](https://github.com/sheepla/strans/actions/workflows/release.yml)
+
+</div>
 
 A command line translate tool written in Go with GNU Readline-like interactive mode (`--repl`) inspired by [translate-shell](https://github.com/soimort/translate-shell)
 
