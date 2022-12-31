@@ -2,12 +2,15 @@
 
 A command line translate tool written in Go with GNU Readline-like interactive mode (`--repl`) inspired by [translate-shell](https://github.com/soimort/translate-shell)
 
+## Features
+
+- *Non-interactive mode*: A mode that can be used in the same way as a general command line tool
+- *Interactive mode*: GNU Readline-like line editing mode for instant translation
+- *Output translated text as speech*: The option to read the translated text aloud after performing the translation
+
 ## Usage
 
-This tool supports both interactive and non-interactive usage.
-
-
-## Non-interactive mode
+### Non-interactive mode
 
 If you specify text as a non-option argument, that text will be translated. Multiple arguments are allowed, and arguments are joined by spaces.
 
@@ -19,6 +22,7 @@ strans -s en -t ja "Hello, World" # => "こんにちは世界"
 ```
 
 A non-option argument of `-` will read text from standard input and translate it.
+You can also output the translated text as speech.
 
 ```
 strans [OPTIONS] -
@@ -28,7 +32,7 @@ echo "Hello, World" | strans -s en -t ja - # => "こんにちは世界"
 strans -s en -t ja < README.md # => The contents of the README.md will translated.
 ```
 
-## Interactive mode
+### Interactive mode
 
 You can use GNU Readline-like interactive mode.
 
@@ -40,7 +44,7 @@ Empty inputs are ignored and no translation is performed.
 Typing `Ctrl-D` exits interactive mode and returns you to the shell you were running from.
 
 ```sh
-[you@your-computer]$ strans --repl -t ja
+[you@your-computer]$ strans --repl -s en -t ja
 REPL mode. Type Ctrl-D to exit.
 >
 > Hello, World
@@ -53,7 +57,13 @@ REPL mode. Type Ctrl-D to exit.
 [you@your-computer]$ 
 ```
 
-## Options
+### Read text as speech (beta)
+
+Running the command with the `--audio` flag, after executing the translation, read the translated text aloud and you can check the pronunciation.
+
+This feature is available in both interactive and non-interactive mode.
+
+### Options
 
 Specify the source language name (e.g. `en`, `ja`, etc.) for `--source` option, and specify the target language name for `--target` option.
 
@@ -86,6 +96,8 @@ but also by setting environment variables.
 
 ```sh
 STRANS_TARGET_LANG="ja" strans "Hello, World" # => "こんにちは世界"
+
+export STRANS_SOURCE_LANG="en"
 export STRANS_TARGET_LANG="ja"
 strans "Hello, World" # => こんにちは世界
 ```
