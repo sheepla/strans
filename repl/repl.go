@@ -20,9 +20,9 @@ import (
 // 	)
 // }
 
+//nolint:nonameretuns
 func Start(param *api.TranslateParam, playAudio bool) {
-	//nolint:forbidigo
-	fmt.Println("REPL mode. Type Ctrl-D to exit.")
+	fmt.Fprintln(os.Stdout, "REPL mode. Type Ctrl-D to exit.")
 
 	line := liner.NewLiner()
 	line.SetCtrlCAborts(false)
@@ -31,6 +31,7 @@ func Start(param *api.TranslateParam, playAudio bool) {
 	defer line.Close()
 
 	for {
+		fmt.Fprintln(os.Stdout, newPrompt(param))
 		input, err := line.Prompt("> ")
 		if err != nil {
 			if errors.Is(err, io.EOF) {
@@ -61,4 +62,8 @@ func Start(param *api.TranslateParam, playAudio bool) {
 			}
 		}
 	}
+}
+
+func newPrompt(param *api.TranslateParam) string {
+	return fmt.Sprintf("\n[%s -> %s]", param.SourceLang, param.TargetLang)
 }
