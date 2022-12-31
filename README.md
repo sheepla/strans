@@ -1,18 +1,27 @@
+<div align="right">
+
+[![golangci-lint](https://github.com/sheepla/strans/actions/workflows/ci.yml/badge.svg)](https://github.com/sheepla/strans/actions/workflows/ci.yml)
+[![Release](https://github.com/sheepla/strans/actions/workflows/release.yml/badge.svg)](https://github.com/sheepla/strans/actions/workflows/release.yml)
+
+</div>
+
 <div align="center">
 
 # strans
 
 </div>
 
-<div align="right">
 
-[![golangci-lint](https://github.com/sheepla/strans/actions/workflows/ci.yml/badge.svg)](https://github.com/sheepla/strans/actions/workflows/ci.yml)
-
-[![Release](https://github.com/sheepla/strans/actions/workflows/release.yml/badge.svg)](https://github.com/sheepla/strans/actions/workflows/release.yml)
-
-</div>
+<div align="center">
 
 A command line translate tool written in Go with GNU Readline-like interactive mode (`--repl`) inspired by [translate-shell](https://github.com/soimort/translate-shell)
+
+
+![Language:Go](https://img.shields.io/static/v1?label=Language&message=Go&color=blue&style=flat-square)
+![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
+[![Latest Release](https://img.shields.io/github/v/release/sheepla/strans?style=flat-square)](https://github.com/sheepla/strans/releases/latest)
+
+</div>
 
 ## Features
 
