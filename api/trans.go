@@ -86,7 +86,6 @@ func (param *TranslateParam) ToURL() *url.URL {
 }
 
 func (param *TranslateParam) ToHTTPRequest() (*http.Request, error) {
-	//nolint:noctx
 	req, err := http.NewRequest(
 		http.MethodGet,
 		param.ToURL().String(),
@@ -97,24 +96,6 @@ func (param *TranslateParam) ToHTTPRequest() (*http.Request, error) {
 	}
 
 	return req, nil
-}
-
-func httpGet(req *http.Request) (io.ReadCloser, error) {
-	//nolint:exhaustivestruct,exhaustruct
-	cl := &http.Client{
-		Timeout: timeout,
-	}
-
-	resp, err := cl.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-
-	if resp.StatusCode < 200 || 300 <= resp.StatusCode {
-		return nil, fmt.Errorf("%w: %s", ErrHTTP, resp.Status)
-	}
-
-	return resp.Body, nil
 }
 
 type Result struct {
