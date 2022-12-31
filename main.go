@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/sheepla/strans/api"
 	"github.com/sheepla/strans/audio"
 	"github.com/sheepla/strans/repl"
-	"github.com/sheepla/strans/trans"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -147,7 +147,7 @@ func run(ctx *cli.Context) error {
 	}
 
 	// Create parameter
-	param, err := trans.NewTranslateParam(
+	param, err := api.NewTranslateParam(
 		ctx.String("source"),
 		ctx.String("target"),
 		text,
@@ -168,7 +168,7 @@ func run(ctx *cli.Context) error {
 	}
 
 	// Execute translate
-	result, err := trans.Translate(param)
+	result, err := api.Translate(param)
 	if err != nil {
 		return cli.Exit(
 			err,

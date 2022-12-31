@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/peterh/liner"
+	"github.com/sheepla/strans/api"
 	"github.com/sheepla/strans/audio"
-	"github.com/sheepla/strans/trans"
 )
 
 // func promptString(param *api.Param) string {
@@ -20,7 +20,7 @@ import (
 // 	)
 // }
 
-func Start(param *trans.TranslateParam, playAudio bool) {
+func Start(param *api.TranslateParam, playAudio bool) {
 	//nolint:forbidigo
 	fmt.Println("REPL mode. Type Ctrl-D to exit.")
 
@@ -48,7 +48,7 @@ func Start(param *trans.TranslateParam, playAudio bool) {
 
 		param.Text = input
 
-		result, err := trans.Translate(param)
+		result, err := api.Translate(param)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

@@ -1,5 +1,5 @@
 //nolint
-package trans
+package api
 
 import "testing"
 

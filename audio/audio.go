@@ -9,7 +9,7 @@ import (
 
 	"github.com/hajimehoshi/go-mp3"
 	"github.com/hajimehoshi/oto/v2"
-	"github.com/sheepla/strans/trans"
+	"github.com/sheepla/strans/api"
 )
 
 const (
@@ -75,12 +75,12 @@ func Play(r io.Reader) error {
 
 //nolint:wrapcheck
 func FetchAndPlay(lang, text, instance string) error {
-	param, err := trans.NewVoiceParam(lang, text, instance)
+	param, err := api.NewVoiceParam(lang, text, instance)
 	if err != nil {
 		return err
 	}
 
-	data, err := trans.FetchVoice(param)
+	data, err := api.FetchVoice(param)
 	if err != nil {
 		return err
 	}
