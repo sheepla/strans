@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/peterh/liner"
+	"github.com/sheepla/strans/audio"
 	"github.com/sheepla/strans/trans"
 )
 
@@ -19,7 +20,7 @@ import (
 // 	)
 // }
 
-func Start(param *trans.TranslateParam) {
+func Start(param *trans.TranslateParam, playAudio bool) {
 	//nolint:forbidigo
 	fmt.Println("REPL mode. Type Ctrl-D to exit.")
 
@@ -53,5 +54,11 @@ func Start(param *trans.TranslateParam) {
 		}
 
 		fmt.Fprintln(os.Stdout, result.Text)
+
+		if playAudio {
+			if err := audio.FetchAndPlay(param.TargetLang, result.Text, param.Instance); err != nil {
+				fmt.Fprintln(os.Stdout, err)
+			}
+		}
 	}
 }

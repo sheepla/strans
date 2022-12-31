@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/sheepla/strans/audio"
 	"github.com/sheepla/strans/repl"
 	"github.com/sheepla/strans/trans"
 	cli "github.com/urfave/cli/v2"
@@ -109,6 +110,12 @@ func initApp() *cli.App {
 			Usage:    "Start interactive mode",
 		},
 		&cli.BoolFlag{
+			Name:     "audio",
+			Aliases:  []string{"a"},
+			Required: false,
+			Usage:    "Read translated text aloud",
+		},
+		&cli.BoolFlag{
 			Name:     "debug",
 			Aliases:  []string{},
 			Required: false,
@@ -152,9 +159,9 @@ func run(ctx *cli.Context) error {
 		)
 	}
 
+	// Start REPL mode
 	if ctx.Bool("repl") {
-		// Start REPL mode
-		repl.Start(param)
+		repl.Start(param, ctx.Bool("audio"))
 
 		return cli.Exit("", exitCodeOK.Int())
 	}
@@ -168,7 +175,18 @@ func run(ctx *cli.Context) error {
 		)
 	}
 
+	// Output translated text
 	fmt.Fprintln(ctx.App.Writer, result.Text)
+
+	// Read translated text aloud
+	if ctx.Bool("audio") {
+		if err := audio.FetchAndPlay(target, result.Text, instance); err != nil {
+			return cli.Exit(
+				err,
+				exitCodeErrIO.Int(),
+			)
+		}
+	}
 
 	return cli.Exit("", exitCodeOK.Int())
 }

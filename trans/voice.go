@@ -20,6 +20,18 @@ type VoiceData struct {
 	Audio []byte
 }
 
+func NewVoiceParam(lang, text, instance string) (*VoiceParam, error) {
+	if strings.TrimSpace(lang) == "" {
+		return nil, fmt.Errorf("%w: language must not be a empty string", ErrInvalidArgs)
+	}
+
+	return &VoiceParam{
+		Lang:     lang,
+		Text:     text,
+		Instance: instance,
+	}, nil
+}
+
 func (param *VoiceParam) ToURL() *url.URL {
 	if strings.TrimSpace(param.Instance) == "" {
 		param.Instance = defaultInstance
@@ -34,6 +46,7 @@ func (param *VoiceParam) ToURL() *url.URL {
 }
 
 func (param *VoiceParam) ToHTTPRequest() (*http.Request, error) {
+	//nolint:noctx
 	req, err := http.NewRequest(http.MethodGet, param.ToURL().String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %s", ErrRequest, err)

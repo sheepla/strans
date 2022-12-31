@@ -3,7 +3,7 @@ package trans
 
 import "testing"
 
-var p1 = &Param{
+var p1 = &TranslateParam{
 	SourceLang: "en",
 	TargetLang: "ja",
 	Text:       "The quick brown fox jumps over the lazy dog.",
