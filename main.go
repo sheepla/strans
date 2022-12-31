@@ -130,10 +130,6 @@ func initApp() *cli.App {
 }
 
 func run(ctx *cli.Context) error {
-	source := ctx.String("source")
-	target := ctx.String("target")
-	instance := ctx.String("instance")
-
 	var text string
 
 	if ctx.NArg() == 1 && ctx.Args().First() == "-" {
@@ -151,7 +147,12 @@ func run(ctx *cli.Context) error {
 	}
 
 	// Create parameter
-	param, err := trans.NewTranslateParam(source, target, text, instance)
+	param, err := trans.NewTranslateParam(
+		ctx.String("source"),
+		ctx.String("target"),
+		text,
+		ctx.String("instance"),
+	)
 	if err != nil {
 		return cli.Exit(
 			err,
@@ -180,7 +181,7 @@ func run(ctx *cli.Context) error {
 
 	// Read translated text aloud
 	if ctx.Bool("audio") {
-		if err := audio.FetchAndPlay(target, result.Text, instance); err != nil {
+		if err := audio.FetchAndPlay(param.TargetLang, result.Text, param.Instance); err != nil {
 			return cli.Exit(
 				err,
 				exitCodeErrIO.Int(),
