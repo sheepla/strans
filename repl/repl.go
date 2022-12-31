@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/peterh/liner"
@@ -12,17 +13,12 @@ import (
 	"github.com/sheepla/strans/audio"
 )
 
-// func promptString(param *api.Param) string {
-// 	return fmt.Sprintf("[%s] %s -> %s\n > ",
-// 		param.Engine,
-// 		param.SourceLang,
-// 		param.TargetLang,
-// 	)
-// }
+//nolint:gochecknoglobals
+var historyFileName = filepath.Join(os.TempDir(), "strans_history.txt")
 
-//nolint:nonameretuns
+//nolint:cyclop,funlen
 func Start(param *api.TranslateParam, playAudio bool) {
-	fmt.Fprintln(os.Stdout, "REPL mode. Type Ctrl-D to exit.")
+	fmt.Fprintln(os.Stdout, "Interactive mode. Type Ctrl-D to exit.")
 
 	line := liner.NewLiner()
 	line.SetCtrlCAborts(false)
@@ -30,12 +26,35 @@ func Start(param *api.TranslateParam, playAudio bool) {
 
 	defer line.Close()
 
+	//nolint:gomnd,nosnakecase
+	historyFile, err := os.OpenFile(historyFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+
+	_, err = line.ReadHistory(historyFile)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+
+	defer historyFile.Close()
+
+	defer func() {
+		if _, err := line.WriteHistory(historyFile); err != nil {
+			fmt.Fprintln(os.Stdout, err)
+		}
+	}()
+
+REPL:
 	for {
 		fmt.Fprintln(os.Stdout, newPrompt(param))
+
 		input, err := line.Prompt("> ")
 		if err != nil {
 			if errors.Is(err, io.EOF) {
-				return
+				fmt.Fprintln(os.Stdout, "bye")
+
+				break REPL
 			}
 
 			if err != nil {
@@ -48,6 +67,8 @@ func Start(param *api.TranslateParam, playAudio bool) {
 		}
 
 		param.Text = input
+
+		line.AppendHistory(input)
 
 		result, err := api.Translate(param)
 		if err != nil {
@@ -66,4 +87,10 @@ func Start(param *api.TranslateParam, playAudio bool) {
 
 func newPrompt(param *api.TranslateParam) string {
 	return fmt.Sprintf("\n[%s -> %s]", param.SourceLang, param.TargetLang)
+}
+
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+
+	return err == nil
 }
