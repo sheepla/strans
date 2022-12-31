@@ -88,9 +88,3 @@ REPL:
 func newPrompt(param *api.TranslateParam) string {
 	return fmt.Sprintf("\n[%s -> %s]", param.SourceLang, param.TargetLang)
 }
-
-func fileExists(filename string) bool {
-	_, err := os.Stat(filename)
-
-	return err == nil
-}
