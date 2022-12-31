@@ -55,26 +55,25 @@ strans -s en -t ja < README.md # => The contents of the README.md will translate
 
 ### Interactive mode
 
-You can use GNU Readline-like interactive mode.
-
-Execute the command with the `-r`, `--repl` flag. 
+To use interactive mode, run the command with the `-r`, `--repl` flag. 
 Enter your text and it will be translated instantly.
+
+You can use GNU Readline-like line editing, scroll back (`Ctrl-N`, `Ctrl-P`) and incremental search (`Ctrl-R`) the execution history.
 
 Empty inputs are ignored and no translation is performed.
 
 Typing `Ctrl-D` exits interactive mode and returns you to the shell you were running from.
 
 ```sh
-[you@your-computer]$ strans --repl -s en -t ja
-REPL mode. Type Ctrl-D to exit.
->
-> Hello, World
-こんにちは世界
->
-> The quick brown fox jumps over the lazy dog.
-素早い茶色のキツネが怠け者の犬を飛び越えます。
->
->
+[you@your-computer]$ strans --repl -s ja -t en
+
+[ja -> en]
+> こんにちは世界
+hello world
+
+[ja -> en]
+> bye
+
 [you@your-computer]$ 
 ```
 
