@@ -9,12 +9,6 @@ import (
 	"net/url"
 	"path"
 	"strings"
-	"time"
-)
-
-const (
-	defaultInstance = "lingva.ml"
-	timeout         = 10 * time.Second
 )
 
 var (

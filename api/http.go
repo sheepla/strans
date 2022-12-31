@@ -4,6 +4,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
+)
+
+const (
+	defaultInstance = "lingva.ml"
+	timeout         = 10 * time.Second
 )
 
 func httpGet(req *http.Request) (io.ReadCloser, error) {
