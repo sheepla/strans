@@ -4,9 +4,9 @@ A command line translate tool written in Go with GNU Readline-like interactive m
 
 ## Features
 
-- *Non-interactive mode*: A mode that can be used in the same way as a general command line tool
-- *Interactive mode*: GNU Readline-like line editing mode for instant translation
-- *Output translated text as speech*: The option to read the translated text aloud after performing the translation
+- **Non-interactive mode**: A mode that can be used in the same way as a general command line tool
+- **Interactive mode**: GNU Readline-like line editing mode for instant translation
+- **Read translated text aloud**: The option to read the translated text aloud after performing the translation
 
 ## Usage
 
