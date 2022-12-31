@@ -60,9 +60,12 @@ Enter your text and it will be translated instantly.
 
 You can use GNU Readline-like line editing, scroll back (`Ctrl-N`, `Ctrl-P`) and incremental search (`Ctrl-R`) the execution history.
 
-Empty inputs are ignored and no translation is performed.
+Empty inputs (just typing `Enter`) are ignored and no translation is performed.
 
 Typing `Ctrl-D` exits interactive mode and returns you to the shell you were running from.
+
+The history is kept in the file `strans_history.txt` in the OS temporary directory 
+and can be recalled when executing the command again.
 
 ```sh
 [you@your-computer]$ strans --repl -s ja -t en
