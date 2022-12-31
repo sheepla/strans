@@ -24,7 +24,7 @@ fmt:
 
 .PHONY: lint
 lint:
-	golang-ci-lint
+	golangci-lint run
 
 .PHONY: test
 test:
