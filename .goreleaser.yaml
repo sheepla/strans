@@ -15,6 +15,9 @@ builds:
       - darwin
     ldflags:
       - -w -s -X main.appVersion={{.Version}} -X main.appRevision={{.Commit}}
+    ignore:
+      - goos: darwin
+        goarch: arm64
 archives:
   - id: foo
     name_template: >-
