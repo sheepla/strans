@@ -24,7 +24,7 @@ func httpGet(req *http.Request) (io.ReadCloser, error) {
 	}
 
 	if resp.StatusCode < 200 || 300 <= resp.StatusCode {
-		return nil, fmt.Errorf("%w: %s", ErrHTTP, resp.Status)
+		return nil, fmt.Errorf("%w: %s %s", ErrHTTP, req.URL.String(), resp.Status)
 	}
 
 	return resp.Body, nil
