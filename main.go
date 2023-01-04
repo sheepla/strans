@@ -90,7 +90,7 @@ func initApp() *cli.App {
 			Name:     "instance",
 			Aliases:  []string{"i"},
 			Required: false,
-			Usage:    "Instance host name of SimplyTranslate",
+			Usage:    "Instance host name of Lingva Translate",
 			EnvVars:  []string{"STRANS_INSTANCE"},
 			Action: func(ctx *cli.Context, s string) error {
 				if strings.TrimSpace(s) == "" {
