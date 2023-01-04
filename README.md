@@ -90,6 +90,8 @@ This feature is available in both interactive and non-interactive mode.
 
 Specify the source language name (e.g. `en`, `ja`, etc.) for `--source` option, and specify the target language name for `--target` option.
 
+To change the instance, specify the hostname of the instance in the `--instance` option.
+
 ```
 NAME:
    strans - a command line translate tool with GNU Readline like interactive mode
@@ -124,6 +126,9 @@ export STRANS_SOURCE_LANG="en"
 export STRANS_TARGET_LANG="ja"
 strans "Hello, World" # => こんにちは世界
 ```
+
+This tool is a program that calls Lingva Translate's public API. 
+See the Lingva Translate [README.md](https://github.com/thedaviddelta/lingva-translate/blob/main/README.md) for details.
 
 ## Installation
 
