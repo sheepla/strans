@@ -136,6 +136,11 @@ See the Lingva Translate [README.md](https://github.com/thedaviddelta/lingva-tra
 go install github.com/sheepla/strans@latest
 ```
 
+## Roadmap
+
+- [ ] Distribute pre-built binaries on GitHub release page
+- [ ] Print more translate info (definitions, similar words, examples, pronunciation, etc.)
+
 ## Thanks
 
 - [lingva-translate](https://github.com/thedaviddelta/lingva-translate)
