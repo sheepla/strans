@@ -67,7 +67,7 @@ Typing `Ctrl-D` exits interactive mode and returns you to the shell you were run
 The history is kept in the file `strans_history.txt` in the OS temporary directory 
 and can be recalled when executing the command again.
 
-```sh
+```
 [you@your-computer]$ strans --repl -s ja -t en
 
 [ja -> en]
@@ -110,8 +110,11 @@ COMMANDS:
 GLOBAL OPTIONS:
    --source value, -s value, --from value  Source language to translate [$STRANS_SOURCE_LANG]
    --target value, -t value, --to value    Target language to translate [$STRANS_TARGET_LANG]
-   --instance value, -i value              Instance host name of SimplyTranslate [$STRANS_INSTANCE]
+   --instance value, -i value              Instance host name of Lingva Translate [$STRANS_INSTANCE]
    --repl, -r                              Start interactive mode (default: false)
+   --audio, -a                             Read translated text aloud (default: false)
+   --list-source, -S                       Show list of source languages (default: false)
+   --list-target, -T                       Show list of target languages (default: false)
    --help, -h                              show help (default: false)
    --version, -v                           print the version (default: false)
 ```
