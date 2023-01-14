@@ -116,6 +116,18 @@ func initApp() *cli.App {
 			Usage:    "Read translated text aloud",
 		},
 		&cli.BoolFlag{
+			Name:     "list-source",
+			Aliases:  []string{"S"},
+			Usage:    "Show list of source languages",
+			Required: false,
+		},
+		&cli.BoolFlag{
+			Name:     "list-target",
+			Aliases:  []string{"T"},
+			Usage:    "Show list of target languages",
+			Required: false,
+		},
+		&cli.BoolFlag{
 			Name:     "debug",
 			Aliases:  []string{},
 			Required: false,
@@ -130,8 +142,36 @@ func initApp() *cli.App {
 }
 
 func run(ctx *cli.Context) error {
-	var text string
+	if ctx.Bool("list-source") {
+		langs, err := api.ListSourceLangs(ctx.String("instance"))
+		if err != nil {
+			return cli.Exit(
+				err,
+				exitCodeErrTranslate.Int(),
+			)
+		}
 
+		printLangs(ctx.App.Writer, langs)
+
+		return cli.Exit("", exitCodeOK.Int())
+	}
+
+	if ctx.Bool("list-target") {
+		langs, err := api.ListTargetLangs(ctx.String("instance"))
+		if err != nil {
+			return cli.Exit(
+				err,
+				exitCodeErrTranslate.Int(),
+			)
+		}
+
+		printLangs(ctx.App.Writer, langs)
+
+		return cli.Exit("", exitCodeOK.Int())
+	}
+
+	// Read stdin mode
+	var text string
 	if ctx.NArg() == 1 && ctx.Args().First() == "-" {
 		var err error
 
@@ -200,4 +240,10 @@ func readString(r io.Reader) (string, error) {
 	}
 
 	return buf.String(), nil
+}
+
+func printLangs(w io.Writer, langs *[]api.Lang) {
+	for _, lang := range *langs {
+		fmt.Fprintf(w, "%s\t%s\n", lang.Code, lang.Name)
+	}
 }

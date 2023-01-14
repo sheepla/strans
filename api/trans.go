@@ -16,7 +16,7 @@ var (
 	ErrRequest     = errors.New("an error occurred on creating request")
 	ErrHTTP        = errors.New("an error occurred on executing HTTP method")
 	ErrResponse    = errors.New("an error occurred on processing response")
-	ErrAPI         = errors.New("an error occurred on calling API")
+	ErrParse       = errors.New("an error occurred on parsing result")
 )
 
 func Translate(param *TranslateParam) (*Result, error) {
