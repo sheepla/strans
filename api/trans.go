@@ -75,7 +75,13 @@ func (param *TranslateParam) ToURL() *url.URL {
 	return &url.URL{
 		Scheme: "https",
 		Host:   param.Instance,
-		Path:   path.Join("api", "v1", param.SourceLang, param.TargetLang, param.Text),
+		Path: path.Join(
+			"api",
+			"v1",
+			url.PathEscape(param.SourceLang),
+			url.PathEscape(param.TargetLang),
+			url.PathEscape(param.Text),
+		),
 	}
 }
 
