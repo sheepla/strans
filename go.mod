@@ -7,7 +7,7 @@ require (
 	github.com/hajimehoshi/oto/v2 v2.3.1
 	github.com/peterh/liner v1.2.2
 	github.com/tidwall/gjson v1.14.4
-	github.com/urfave/cli/v2 v2.23.7
+	github.com/urfave/cli/v2 v2.24.1
 )
 
 require (
