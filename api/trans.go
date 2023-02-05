@@ -126,5 +126,10 @@ func parseResult(body io.ReadCloser) (*Result, error) {
 
 	defer body.Close()
 
+	// unescape url
+	if escaped, err := url.PathUnescape(result.Text); err == nil {
+		result.Text = escaped
+	}
+
 	return &result, nil
 }
