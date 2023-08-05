@@ -8,7 +8,7 @@ require (
 	github.com/koki-develop/go-fzf v0.15.0
 	github.com/peterh/liner v1.2.2
 	github.com/tidwall/gjson v1.14.4
-	github.com/urfave/cli/v2 v2.23.7
+	github.com/urfave/cli/v2 v2.25.1
 )
 
 require (
