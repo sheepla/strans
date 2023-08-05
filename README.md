@@ -26,10 +26,18 @@ A command line translate tool written in Go with GNU Readline-like interactive m
 ## Features
 
 - **Non-interactive mode**: A mode that can be used in the same way as a general command line tool
-- **Interactive mode**: GNU Readline-like line editing mode for instant translation
+- **Interactive mode**: [GNU Readline](https://en.wikipedia.org/wiki/GNU_Readline)-like line editing mode for instant translation
 - **Read translated text aloud**: The option to read the translated text aloud after performing the translation
 
 ## Usage
+
+### Specifying languages for translations source and targets
+
+To specify the translation source/target language, specify values for the arguments of the `-s`, `--source` and `-t`, `--target` options, or set values in the environment variable `STRANS_SOURCE_LANG`, `STRANS_TARGET_LANG`.
+
+If you specify `?` as the `--source` or `--target` option's value, a fzf-like menu will be displayed, allowing you to interactively select the language.
+
+To check the list of languages, run the command with `-S`, `--list-source` or `-T`, `--list-target` options.
 
 ### Non-interactive mode
 
@@ -108,13 +116,13 @@ COMMANDS:
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --source value, -s value, --from value  Source language to translate [$STRANS_SOURCE_LANG]
-   --target value, -t value, --to value    Target language to translate [$STRANS_TARGET_LANG]
+   --source value, -s value, --from value  Source language to translate; specifying the value '?' will shows a selectable menu [$STRANS_SOURCE_LANG]
+   --target value, -t value, --to value    Target language to translate; specifying the value '?' will shows a selectable menu [$STRANS_TARGET_LANG]
    --instance value, -i value              Instance host name of Lingva Translate [$STRANS_INSTANCE]
    --repl, -r                              Start interactive mode (default: false)
    --audio, -a                             Read translated text aloud (default: false)
-   --list-source, -S                       Show list of source languages (default: false)
-   --list-target, -T                       Show list of target languages (default: false)
+   --list-source, -S                       Show a list of source languages (default: false)
+   --list-target, -T                       Show a list of target languages (default: false)
    --help, -h                              show help (default: false)
    --version, -v                           print the version (default: false)
 ```
