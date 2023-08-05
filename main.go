@@ -57,7 +57,7 @@ func initApp() *cli.App {
 			Name:     "source",
 			Aliases:  []string{"s", "from"},
 			Required: true,
-			Usage:    "Source language to translate",
+			Usage:    "Source language to translate; specifying the value '?' will shows a selectable menu",
 			EnvVars:  []string{"STRANS_SOURCE_LANG"},
 			Action: func(ctx *cli.Context, s string) error {
 				if strings.TrimSpace(s) == "" {
@@ -74,7 +74,7 @@ func initApp() *cli.App {
 			Name:     "target",
 			Aliases:  []string{"t", "to"},
 			Required: true,
-			Usage:    "Target language to translate",
+			Usage:    "Target language to translate; specifying the value '?' will shows a selectable menu",
 			EnvVars:  []string{"STRANS_TARGET_LANG"},
 			Action: func(ctx *cli.Context, s string) error {
 				if strings.TrimSpace(s) == "" {
@@ -119,13 +119,13 @@ func initApp() *cli.App {
 		&cli.BoolFlag{
 			Name:     "list-source",
 			Aliases:  []string{"S"},
-			Usage:    "Show list of source languages",
+			Usage:    "Show a list of source languages",
 			Required: false,
 		},
 		&cli.BoolFlag{
 			Name:     "list-target",
 			Aliases:  []string{"T"},
-			Usage:    "Show list of target languages",
+			Usage:    "Show a list of target languages",
 			Required: false,
 		},
 		&cli.BoolFlag{
