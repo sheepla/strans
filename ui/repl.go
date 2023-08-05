@@ -1,4 +1,4 @@
-package repl
+package ui
 
 import (
 	"errors"
@@ -17,7 +17,7 @@ import (
 var historyFileName = filepath.Join(os.TempDir(), "strans_history.txt")
 
 //nolint:cyclop,funlen
-func Start(param *api.TranslateParam, playAudio bool) {
+func Repl(param *api.TranslateParam, playAudio bool) {
 	fmt.Fprintln(os.Stdout, "Interactive mode. Type Ctrl-D to exit.")
 
 	line := liner.NewLiner()

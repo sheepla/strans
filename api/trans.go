@@ -78,8 +78,8 @@ func (param *TranslateParam) ToURL() *url.URL {
 		Path: path.Join(
 			"api",
 			"v1",
-			url.PathEscape(param.SourceLang),
-			url.PathEscape(param.TargetLang),
+			param.SourceLang,
+			param.TargetLang,
 			url.PathEscape(param.Text),
 		),
 	}

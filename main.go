@@ -9,7 +9,7 @@ import (
 
 	"github.com/sheepla/strans/api"
 	"github.com/sheepla/strans/audio"
-	"github.com/sheepla/strans/repl"
+	ui "github.com/sheepla/strans/ui"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -28,6 +28,7 @@ const (
 	exitCodeErrArgs
 	exitCodeErrTranslate
 	exitCodeErrIO
+	exitCodeErrUI
 )
 
 func (e exitCode) Int() int {
@@ -186,23 +187,50 @@ func run(ctx *cli.Context) error {
 		text = strings.Join(ctx.Args().Slice(), " ")
 	}
 
+	// Get instance param
+	instance := ctx.String("instance")
+
+	// Get source language param
+	source := ctx.String("source")
+	if source == "?" {
+		sourceLangs, err := api.ListSourceLangs(instance)
+		if err != nil {
+			return cli.Exit(err, exitCodeErrTranslate.Int())
+		}
+
+		idx, err := ui.SelectLang(*sourceLangs)
+		if err != nil {
+			return cli.Exit(err, exitCodeErrUI.Int())
+		}
+
+		source = (*sourceLangs)[idx].Code
+	}
+
+	// Get target language param
+	target := ctx.String("target")
+	if target == "?" {
+		targetLangs, err := api.ListSourceLangs(instance)
+		if err != nil {
+			return cli.Exit(err, exitCodeErrTranslate.Int())
+		}
+
+		idx, err := ui.SelectLang(*targetLangs)
+		if err != nil {
+			return cli.Exit(err, exitCodeErrUI.Int())
+		}
+
+		target = (*targetLangs)[idx].Code
+	}
+
 	// Create parameter
-	param, err := api.NewTranslateParam(
-		ctx.String("source"),
-		ctx.String("target"),
-		text,
-		ctx.String("instance"),
-	)
+	param, err := api.NewTranslateParam(source, target, text, instance)
 	if err != nil {
-		return cli.Exit(
-			err,
-			exitCodeErrArgs.Int(),
-		)
+		return cli.Exit(err, exitCodeErrArgs.Int())
 	}
 
 	// Start REPL mode
 	if ctx.Bool("repl") {
-		repl.Start(param, ctx.Bool("audio"))
+		ui.Repl(param, ctx.Bool("audio"))
 
 		return cli.Exit("", exitCodeOK.Int())
 	}
@@ -210,10 +238,7 @@ func run(ctx *cli.Context) error {
 	// Execute translate
 	result, err := api.Translate(param)
 	if err != nil {
-		return cli.Exit(
-			err,
-			exitCodeErrTranslate.Int(),
-		)
+		return cli.Exit(err, exitCodeErrTranslate.Int())
 	}
 
 	// Output translated text
@@ -222,10 +247,7 @@ func run(ctx *cli.Context) error {
 	// Read translated text aloud
 	if ctx.Bool("audio") {
 		if err := audio.FetchAndPlay(param.TargetLang, result.Text, param.Instance); err != nil {
-			return cli.Exit(
-				err,
-				exitCodeErrIO.Int(),
-			)
+			return cli.Exit(err, exitCodeErrIO.Int())
 		}
 	}
 
